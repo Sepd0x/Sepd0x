@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
+    inputs:
+      thm:
+        description: "TryHackMe numbers as JSON (level, title, rank, top_percent, badges, streak, rooms, as_of)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -28,6 +33,15 @@ jobs:
       - name: Install
         working-directory: tools
         run: npm ci --no-audit --no-fund
+
+      - name: TryHackMe numbers (manual)
+        if: ${{ inputs.thm != '' }}
+        env:
+          THM_IN: ${{ inputs.thm }}
+        run: |
+          echo "$THM_IN" | jq -e '(.rank|type=="number") and (.rooms|type=="number") and (.badges|type=="number") and (.streak|type=="number") and (.level|type=="string") and (.as_of|test("^[0-9]{4}-[0-9]{2}-[0-9]{2}$"))' > /dev/null
+          echo "$THM_IN" | jq '{username:"Sepd", level, title, rank, top_percent, badges, streak, rooms, source:"manual", as_of}' > data/thm.json
+          cat data/thm.json
 
       - name: Render
         working-directory: tools
