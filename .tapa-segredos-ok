@@ -1,0 +1,2 @@
+linha tools/card.mjs:20         # lê o token da variável de ambiente (GITHUB_TOKEN da Action); não há token no código
+linha tools/lib.mjs:78          # lê o token da variável de ambiente (GITHUB_TOKEN da Action); não há token no código
