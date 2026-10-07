@@ -142,7 +142,7 @@ export async function render({ force = false } = {}) {
 
   const [ax0, ay0] = map(aoi.x0, aoi.y0), [ax1, ay1] = map(aoi.x1, aoi.y1);
   const aw = ax1 - ax0, ah = ay1 - ay0;
-  const T0 = 1.1, SWEEP = 3.6, CYCLE = 10;           // seconds
+  const T0 = 1.1, SWEEP = 3.6, CYCLE = 12;           // seconds; CYCLE is the page's one loop clock (terrain.mjs)
   const pct = (t) => n((t / CYCLE) * 100, 2);
   const found = pools.map((p) => { const [x, y] = map(p.x, p.y); return { x, y, r: Math.max(2.2, Math.sqrt(p.n) * k * 0.6), t: T0 + SWEEP * ((x - ax0) / aw) }; })
     .sort((a, b) => a.x - b.x);

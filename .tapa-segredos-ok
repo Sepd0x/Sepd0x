@@ -1,2 +1,3 @@
 linha tools/card.mjs:20         # lê o token da variável de ambiente (GITHUB_TOKEN da Action); não há token no código
 linha tools/lib.mjs:78          # lê o token da variável de ambiente (GITHUB_TOKEN da Action); não há token no código
+linha _old/critica/r2/card.before.mjs:20  # cópia local do card.mjs antes da revisão (_old/ está no .gitignore, não é publicada); lê o token do ambiente, como a original

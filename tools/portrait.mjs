@@ -111,7 +111,9 @@ export async function render({ force = false } = {}) {
   const used = new Set();
   const OX = (FW - COLS * CW) / 2, OY = (FH - rows * CH) / 2;
   const rowsSvg = [];
-  const READ_AT = 0.15 + ROWS * 0.03 + 1.2, READ_ROW = 0.055;
+  // The read runs on the page's 12 s clock, in its own window after the card's sweep and the terrain's
+  // beam (terrain.mjs), so the three never scan at the same time.
+  const READ_AT = 8.6, READ_ROW = 0.055, CYCLE = 12;
   for (let r = 0; r < rows; r++) {
     let cells = '';
     for (let c = 0; c < COLS; c++) {
@@ -128,7 +130,7 @@ export async function render({ force = false } = {}) {
     if (cells) rowsSvg.push(`<g transform="translate(0 ${n(OY + (r + 1) * CH - 1.5, 1)})"><g class="r" style="animation-delay:${n(0.15 + r * 0.03, 3)}s,${n(READ_AT + r * READ_ROW, 3)}s">${cells}</g></g>`);
   }
   const defs = [...used].map((ch) => `<path id="${gid.get(ch)}" d="${glyphRun(ch, 0, 0, SIZE, { prec: 2 })[0].d}"/>`).join('');
-  const cycle = n(READ_AT + rows * READ_ROW + 6, 2);
+  const cycle = CYCLE;
   const headY0 = OY, headY1 = OY + rows * CH;
 
   for (const [name, c] of Object.entries(THEMES)) {

@@ -56,7 +56,9 @@ export async function render() {
   const seg = (a, b) => `M${pt(a)}L${pt(b)}`;
 
   // Timing.
-  const BUILD = 1.8, BEAM_AT = BUILD + 1.2, BEAM_T = 3.4, PERIOD = 12;
+  // One 12 s clock for every loop on the page, each in its own window so no two scans run at once:
+  // the card's sweep 1.1-4.7 s, this beam 5.0-8.0 s, the portrait's read 8.6-11.4 s, then quiet.
+  const BUILD = 1.8, BEAM_AT = 5, BEAM_T = 3, PERIOD = 12;
   const waveDelay = (wi) => n(0.2 + BUILD * (wi / weeks), 3);
   const beamDelay = (x) => n(BEAM_AT + BEAM_T * (x / weeks), 3);
 
@@ -124,9 +126,11 @@ export async function render() {
 
   // Type.
   const fmt = (iso) => iso.replaceAll('-', '.');
-  const handle = glyphRun('sepd0x', PAD.l + 6, H - 18, 18, { track: -0.3 });
-  const meta = textPath(`${fmt(days[0].date)} → ${fmt(last.date)}`, W - PAD.r - 6, 30, 8, { align: 'end', track: 0.6 });
-  const count = textPath(String(cal.totalContributions), W - PAD.r - 6, 18, 8, { align: 'end', track: 0.7 });
+  // x: the handle's ink edge falls on the same vertical as "marco-polo" and the THM level below.
+  const handle = glyphRun('sepd0x', 24.9, H - 18, 18, { track: -0.3 });
+  // The meta ends on the right vertical of the cards and the THM strip below (x ≈ 934 px at 1000).
+  const meta = textPath(`${fmt(days[0].date)} → ${fmt(last.date)}`, W - 25, 30, 8, { align: 'end', track: 0.6 });
+  const count = textPath(String(cal.totalContributions), W - 25, 18, 8, { align: 'end', track: 0.7 });
 
   const out = {};
   for (const [name, c] of Object.entries(THEMES)) {
@@ -143,7 +147,7 @@ export async function render() {
 .k{fill:${c.acc};fill-opacity:.85;stroke:${c.accHi};stroke-width:1.2;stroke-linejoin:round;opacity:0;animation:beam ${PERIOD}s linear infinite}
 .h{fill:${c.ink}}.z{fill:${c.acc}}
 .stem{stroke:${c.acc};stroke-width:1;stroke-dasharray:2 2;opacity:0;animation:in .4s ease-out ${BUILD + 0.9}s forwards}
-.cur{fill:${c.acc};stroke:${c.paper};stroke-width:1.5;paint-order:stroke;opacity:0;animation:in .01s ${BUILD + 0.9}s forwards,blink 1.1s steps(1) ${BUILD + 0.9}s infinite}
+.cur{fill:${c.acc};stroke:${c.paper};stroke-width:1.5;paint-order:stroke;opacity:0;animation:in .01s ${BUILD + 0.9}s forwards,blink 1.1s steps(1) ${BUILD + 0.9}s 3}
 @keyframes rise{to{transform:scaleY(1)}}
 @keyframes in{to{opacity:1}}
 @keyframes glint{0%,100%{fill:${c.muted}}1%{fill:${c.accHi}}8%{fill:${c.muted}}}

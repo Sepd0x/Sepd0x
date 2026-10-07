@@ -5,8 +5,6 @@
   </picture>
 </p>
 
-<br>
-
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/portrait-dark.svg">
@@ -16,6 +14,13 @@
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/marco-polo-dark.svg">
       <img src="assets/marco-polo-light.svg" width="49%" alt="marco-polo">
+    </picture>
+  </a>
+  <br>
+  <a href="https://tryhackme.com/p/Sepd">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/thm-dark.svg">
+      <img src="assets/thm-light.svg" width="98.5%" alt="tryhackme">
     </picture>
   </a>
 </p>
