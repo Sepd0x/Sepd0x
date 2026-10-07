@@ -33,7 +33,7 @@ jobs:
         working-directory: tools
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          THM_LIVE: '1'
+          THM_LIVE: '0'
         run: node render.mjs
 
       - name: Commit
