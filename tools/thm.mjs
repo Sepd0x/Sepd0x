@@ -183,7 +183,7 @@ export async function refresh(prev) {
 const X0 = 20, X1 = W - 20;
 const JOINT = 522.5;                                            // the gutter between the cards above
 const HEX_R = 5.5;
-const NUM = 18, HERO = 32, LAB = 9, RANK_LAB = 10;
+const NUM = 18, HERO = 32, LAB = 10, RANK_LAB = 10, TAG = 16;
 const Y = { num: 41, rail: 68, foot: 85 };                     // baselines; every mark stands on the rail
 const GAP = 18;                                                 // free space before the next column's tick
 const columns = (badges) => {
@@ -237,7 +237,20 @@ export function draw(d, today) {
   const COLS = columns(d.badges);
   for (const [k, w] of COLS) { at[k] = { x: gx, w, end: gx + w - GAP }; ticks += `M${n(gx)} ${Y.rail}v5`; gx += w; }
   parts.push(`<path class="rail" d="M${X0} ${Y.rail}H${X1}${ticks}"/>`);
-  for (const [k] of COLS) if (k !== 'rooms') text('mu sm', k, at[k].x, Y.foot, LAB, { track: 0.5 });
+  // Readouts and names exist twice: as drawn (.dk) and for narrow screens (.mb, see the media query).
+  // On a phone the strip is ~355 px wide (1 unit ≈ 0.34 px), so MOB = 26 units reads at ~9 px.
+  const MOB = 26, MOB_FOOT = 98;
+  const name = (desk, mob, x) => { text('mu sm dk', desk, x, Y.foot, LAB, { track: 0.3 }); text('mu mb', mob, x, MOB_FOOT, MOB - 1, { track: -0.5 }); };
+  const num = (str, x, t) => `<g class="dk">${odometer(str, x, Y.num, NUM, t).svg}</g><g class="mb">${odometer(str, x, Y.num, MOB, t).svg}</g>`;
+  // Each number says what it counts in plain words (a friend could not tell "streak" or "rank" apart
+  // from the marks): day streak, global rank.
+  const NAMES = { streak: 'day streak', badges: 'badges', rank: 'global rank' };
+  for (const [k] of COLS) {
+    if (k === 'rooms') continue;
+    // The title belongs to the level: "level · hacker" where there is room, "level" on a phone.
+    if (k === 'level' && d.title) name(`level · ${d.title.toLowerCase()}`, k, at[k].x);
+    else name(NAMES[k] || k, k === 'rank' ? k : NAMES[k] || k, at[k].x);   // phone: "rank", or it runs into "badges"
+  }
 
   // Level: the anchor, still from the first frame like the handle in the terrain. "0x" is the notation,
   // the digit the value. Its ink edge sits on the card's "marco-polo" above (the 0 has a wider bearing).
@@ -254,7 +267,7 @@ export function draw(d, today) {
   // to fill the column, so every mark ends on the same margin.
   {
     const { x, end } = at.rooms, t = T0, avail = end - x - 3;
-    parts.push(odometer(String(d.rooms), x, Y.num, NUM, t).svg);
+    parts.push(num(String(d.rooms), x, t));
     const unit = [1, 5, 10, 25, 50, 100, 250].find((u) => avail / Math.ceil(d.rooms / u) >= 3) || 500;
     const count = Math.ceil(d.rooms / unit);
     const P = Math.min(6, avail / Math.max(count, 1));
@@ -265,14 +278,14 @@ export function draw(d, today) {
       s += `<path class="tk rz${h > 5 ? ' tl' : ''}" ${rise(t + 0.5 + i * step)} d="M${n(x + 3 + i * P + P / 2)} ${Y.rail}v-${h}"/>`;
     }
     parts.push(s);
-    text('mu sm', unit > 1 ? `rooms ×${unit}` : 'rooms', x, Y.foot, LAB, { track: 0.5 });
+    name(unit > 1 ? `rooms ×${unit}` : 'rooms', unit > 1 ? `rooms ×${unit}` : 'rooms', x);
   }
 
   // Streak: the last four weeks as day cells, today on the right. Today is green with the terrain's
   // dashed stem over it; a 14-day streak fills half the window, so the window itself says something.
   {
     const { x, end } = at.streak, t = T0 + 0.25, WIN = 28;
-    parts.push(odometer(String(d.streak), x, Y.num, NUM, t).svg);
+    parts.push(num(String(d.streak), x, t));
     const P = (end - x - 3) / WIN, C = n(P * 0.7, 2);
     const lit = Math.min(d.streak, WIN);
     let s = '';
@@ -293,7 +306,7 @@ export function draw(d, today) {
   // strip of honeycomb, so nine read as a comb and not as a row of zeros.
   {
     const { x, end } = at.badges, t = T0 + 0.5, avail = end - x - 3;
-    parts.push(odometer(String(d.badges), x, Y.num, NUM, t).svg);
+    parts.push(num(String(d.badges), x, t));
     let r = HEX_R;
     const fits = (rr) => Math.floor((avail - 2 * rr) / (1.5 * rr)) + 1;
     if (d.badges > fits(r)) r = Math.max(3, avail / (1.5 * (d.badges - 1) + 2));
@@ -315,11 +328,13 @@ export function draw(d, today) {
     const { x } = at.rank, t = T0 + 0.75;
     const top = d.top_percent;
     if (top != null) {
-      parts.push(`<g class="tp" style="animation-delay:${n(t, 2)}s">`);  // the notation arrives with its number
-      const tw = text('mu', 'top ', x, Y.num, NUM).width;
-      const o = odometer(String(top), x + tw, Y.num, NUM, t);
-      text('mu', '%', o.end + 0.6, Y.num, NUM);
-      parts.push('</g>', o.svg);
+      for (const [cls, S] of [['dk', NUM], ['mb', MOB]]) {
+        parts.push(`<g class="${cls}"><g class="tp" style="animation-delay:${n(t, 2)}s">`);  // the notation arrives with its number
+        const tw = text('mu', 'top ', x, Y.num, S).width;
+        const o = odometer(String(top), x + tw, Y.num, S, t);
+        text('mu', '%', o.end + 0.6, Y.num, S);
+        parts.push('</g>', o.svg, '</g>');
+      }
       const ax = x + 3, aw = X1 - ax;
       const px = ax + (aw * (100 - top)) / 100;
       let tk = '';
@@ -341,10 +356,12 @@ export function draw(d, today) {
     }
   }
 
-  // Where it comes from: top right, on the numbers' baseline, so the end of the axis stays free for the
-  // marker (the better the rank, the further right it goes). The date only when the numbers are older
-  // than a few days (the Action keeps them fresh when THM answers).
-  const tag = text('mu sm tag', 'tryhackme', X1, Y.num, LAB, { align: 'end', track: 0.5 });
+  // Where it comes from, named the way the site writes it: "TryHackMe" in ink, top right on the numbers'
+  // baseline, on desktop and on a phone, so the strip reads as THM at first sight (plain type, not their
+  // logo). The end of the axis stays free for the marker (the better the rank, the further right it
+  // goes). The date only when the numbers are older than a few days (the Action keeps them fresh).
+  const tag = text('ink dk', 'TryHackMe', X1, Y.num, TAG, { align: 'end', track: 0.2 });
+  text('ink mb', 'TryHackMe', X1, Y.num, MOB, { align: 'end', track: -0.5 });
   const age = (Date.parse(today) - Date.parse(d.as_of)) / 864e5;
   if (age > STALE_DAYS) text('mu xs', d.as_of.replaceAll('-', '.'), X1 - tag.width - 12, Y.num, LAB, { align: 'end', track: 0.5 });
 
@@ -358,10 +375,10 @@ export function draw(d, today) {
   for (const [name, c] of Object.entries(THEMES)) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${label}">
 <style>
-.frame{fill:${c.paper};stroke:${c.faint}}
+.frame{fill:none;stroke:${c.faint}}
 .mu{fill:${c.muted}}.ink,.n{fill:${c.ink}}
-.rail{fill:none;stroke:${c.hatch};stroke-width:1}
-.ax{fill:none;stroke:${c.hatch};stroke-width:1}
+.rail{fill:none;stroke:${c.line};stroke-width:1}
+.ax{fill:none;stroke:${c.line};stroke-width:1}
 .o{animation:roll .9s ${LAND} backwards}
 .rz{transform-box:fill-box;transform-origin:50% 100%;animation:rise .45s ${RISE} backwards}
 .tk{stroke:${c.muted};stroke-width:1.2}.tl{stroke:${c.ink}}
@@ -378,7 +395,8 @@ export function draw(d, today) {
 @keyframes slide{0%{opacity:0;transform:translateX(var(--dx))}10%{opacity:1}}
 @keyframes in{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){.o,.rz,.fill,.mk,.tp{animation:none}}
-@media (max-width:600px){.xs{display:none}.sm{transform-box:fill-box;transform-origin:0 0;transform:scale(2)}.tag{transform-origin:100% 100%}.rail,.ax{stroke-width:2}}
+.mb{display:none}
+@media (max-width:600px){/*mb*/.xs,.dk{display:none}.mb{display:inline}.rail,.ax{stroke-width:2}}/*/mb*/
 </style>
 <defs>${[...defs.values()].join('')}<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".16" stop-color="#fff"/><stop offset=".84" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>${maskDefs}</defs>
 <rect class="frame" x=".5" y=".5" width="${W - 1}" height="${H - 1}" rx="${R}"/>

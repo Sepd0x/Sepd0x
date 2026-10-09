@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import sharp from 'sharp';
-import { THEMES, profile, download, glyphRun, writeAsset, tidy, n, isMain, CACHE, ASSETS, readState, writeState } from './lib.mjs';
+import { THEMES, profile, download, glyphRun, writeAsset, tidy, n, isMain, CACHE, ASSETS, readState, writeState, OFFLINE } from './lib.mjs';
 
 const FW = 520, FH = 372, R = 8;                 // same frame as the marco-polo card
 const CW = 4.4, CH = 7.4;                        // cell; glyph size = CW / .6 (monospace advance)
@@ -49,7 +49,8 @@ async function toneRamp() {
 export async function render({ force = false } = {}) {
   const user = await profile();
   const state = readState();
-  const buf = await download(user.avatarUrl, path.join(CACHE, 'avatar.png'));
+  const avatarFile = path.join(CACHE, 'avatar.png');
+  const buf = OFFLINE && fs.existsSync(avatarFile) ? fs.readFileSync(avatarFile) : await download(user.avatarUrl, avatarFile);
   const hash = crypto.createHash('sha256').update(buf).digest('hex').slice(0, 16);
   if (!force && state.avatar === hash && fs.existsSync(path.join(ASSETS, 'portrait-dark.svg'))) {
     console.log('same  portrait (avatar unchanged)');
@@ -136,14 +137,14 @@ export async function render({ force = false } = {}) {
   for (const [name, c] of Object.entries(THEMES)) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${FW} ${FH}" width="${FW}" height="${FH}" role="img" aria-label="portrait">
 <style>
-.frame{fill:${c.paper};stroke:${c.faint}}
-.r{fill:${c.muted};opacity:0;animation:row .45s steps(3,end) both,read ${cycle}s linear infinite}
+.frame{fill:none;stroke:${c.faint}}
+.r{fill:${c.muted};animation:row .45s steps(3,end) backwards,read ${cycle}s linear infinite}
 .e{fill:${c.ink}}.a{fill:${c.acc}}
 .head{opacity:0;animation:head ${cycle}s linear ${READ_AT}s infinite}
 @keyframes row{0%{opacity:0;transform:translateX(-5px)}100%{opacity:1}}
 @keyframes read{0%,100%{fill:${c.muted}}.8%{fill:${c.accHi}}4%{fill:${c.muted}}}
 @keyframes head{0%{opacity:1;transform:translateY(${n(headY0)}px)}${n((rows * READ_ROW / cycle) * 100, 2)}%{opacity:1;transform:translateY(${n(headY1)}px)}${n(((rows * READ_ROW + 0.3) / cycle) * 100, 2)}%,100%{opacity:0;transform:translateY(${n(headY1)}px)}}
-@media (prefers-reduced-motion:reduce){.r,.head{animation:none}.r{opacity:1}}
+@media (prefers-reduced-motion:reduce){.r,.head{animation:none}}
 </style>
 <defs>${defs}<linearGradient id="hg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${c.acc}" stop-opacity=".22"/><stop offset="1" stop-color="${c.acc}" stop-opacity="0"/></linearGradient>
 <clipPath id="cf"><rect x=".5" y=".5" width="${FW - 1}" height="${FH - 1}" rx="${R}"/></clipPath></defs>

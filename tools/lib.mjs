@@ -9,20 +9,25 @@ export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export const ASSETS = path.join(ROOT, 'assets');
 export const CACHE = path.join(ROOT, 'tools', '.cache');
 export const LOGIN = 'Sepd0x';
+// --offline: render from tools/.cache only (profile, avatar, the card's capture); no network at all.
+export const OFFLINE = process.argv.includes('--offline');
 
-// One ink, one accent. Dark values sit on #0d1117, light values on #ffffff.
+// One ink, one accent. No page colour: every SVG is transparent and sits on whichever GitHub theme the
+// reader uses. Dark values hold on #0d1117 (dark), #212830 (dark dimmed) and #010409 (dark high
+// contrast); light values on #ffffff (light and light high contrast). Text (ink, muted, acc) is at least
+// 4.5:1 on all of them, lines that carry meaning (acc, accHi, edge, line) at least 3:1. faint and hatch
+// are decoration (panel outlines, the empty plain, engraving): translucent ink, so they keep the same
+// step from the page on every background instead of vanishing on the dimmed one.
 export const THEMES = {
   dark: {
-    ink: '#e6edf3', muted: '#7d8590', faint: '#30363d',
+    ink: '#e6edf3', muted: '#8b949e', faint: 'rgba(230,237,243,.15)',
     acc: '#3fb950', accHi: '#56d364',
-    edge: '#6e7681', hatch: '#484f58',
-    paper: '#0d1117',
+    edge: '#6e7681', line: '#6e7681', hatch: 'rgba(230,237,243,.27)',
   },
   light: {
-    ink: '#1f2328', muted: '#656d76', faint: '#d0d7de',
+    ink: '#1f2328', muted: '#656d76', faint: 'rgba(31,35,40,.19)',
     acc: '#1a7f37', accHi: '#2da44e',
-    edge: '#57606a', hatch: '#afb8c1',
-    paper: '#ffffff',
+    edge: '#57606a', line: '#818b98', hatch: 'rgba(31,35,40,.36)',
   },
 };
 

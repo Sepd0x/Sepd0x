@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import sharp from 'sharp';
-import { THEMES, textPath, glyphRun, writeAsset, tidy, n, isMain, CACHE, ASSETS, download, readState, writeState } from './lib.mjs';
+import { THEMES, textPath, glyphRun, writeAsset, tidy, n, isMain, CACHE, ASSETS, download, readState, writeState, OFFLINE } from './lib.mjs';
 
 const REPO = 'Sepd0x/marco-polo';
 const MEDIA = 'docs/media';
@@ -84,7 +84,10 @@ function atkinson(gray, w, h) {
 }
 
 export async function render({ force = false } = {}) {
-  const media = (await listMedia()).filter((f) => /\.(png|jpe?g)$/i.test(f.name));
+  // Offline: the cached capture stands in for the listing (same sha as last time, so the state holds).
+  const cached = PREFER.find((p) => fs.existsSync(path.join(CACHE, p)));
+  const media = OFFLINE && cached ? [{ name: cached, sha: readState().card }]
+    : (await listMedia()).filter((f) => /\.(png|jpe?g)$/i.test(f.name));
   const pick = PREFER.map((p) => media.find((m) => m.name === p)).find(Boolean) || media[0];
   if (!pick) throw new Error('no media in ' + MEDIA);
   const state = readState();
@@ -93,7 +96,7 @@ export async function render({ force = false } = {}) {
     return;
   }
   const file = path.join(CACHE, pick.name);
-  const buf = fs.existsSync(file) && state.card === pick.sha ? fs.readFileSync(file) : await download(pick.download_url, file);
+  const buf = fs.existsSync(file) && (OFFLINE || state.card === pick.sha) ? fs.readFileSync(file) : await download(pick.download_url, file);
 
   const { data, info } = await sharp(buf).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: SW, height: SH } = info;
@@ -126,7 +129,8 @@ export async function render({ force = false } = {}) {
   const cuts = [0.4, 0.68, 0.88].map((t) => q[Math.floor(q.length * t)]);
   const tone = (v) => (v < cuts[0] ? 0 : v < cuts[1] ? 1 : v < cuts[2] ? 2 : 3);
 
-  // One PNG per theme, in the theme's ink with transparency, so it sits on either page colour.
+  // One PNG per theme, in the theme's ink with transparency, so it sits on any page colour. Outside the
+  // area the imagery is dimmed by a mask (not a veil in a page colour), so the card has no background.
   async function rasterPng(hex, alphas, invert) {
     const rgb = [1, 3, 5].map((o) => parseInt(hex.slice(o, o + 2), 16));
     const out = Buffer.alloc(gw * gh * 4);
@@ -163,47 +167,54 @@ export async function render({ force = false } = {}) {
 
   const name = glyphRun('marco-polo', 20, H - 20, 19, { track: -0.3 });
   const line = textPath('draw an area · find every pool', W - 20, H - 22, 11, { align: 'end', track: 0.2 });
+  // Narrow screens (the card is ~175 px wide on a phone): name and line stacked, big enough for ~9 px;
+  // the sweep's rail gives way to them.
+  const nameMob = glyphRun('marco-polo', 20, IH + 34, 30, { track: -0.5 });
+  const lineMob = textPath('draw an area · find every pool', 20, H - 10, 26, { track: 0 });
 
   for (const [theme, c] of Object.entries(THEMES)) {
     const dark = theme === 'dark';
     const img = await rasterPng(dark ? '#c9d1d9' : '#1f2328', dark ? [0, 40, 95, 165] : [0, 35, 80, 150], !dark);
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="marco-polo">
 <style>
-.frame{fill:${c.paper};stroke:${c.faint}}
-.aoi{fill:none;stroke:${c.acc};stroke-width:1.2;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .9s cubic-bezier(.65,0,.35,1) .15s forwards}
-.veil{fill:${c.paper};fill-opacity:.55}
+.frame{fill:none;stroke:${c.faint}}
+.aoi{fill:none;stroke:${c.acc};stroke-width:1.2;stroke-dasharray:1;animation:draw .9s cubic-bezier(.65,0,.35,1) .15s backwards}
 .sw{animation:sweep ${CYCLE}s linear ${T0}s infinite;transform:translateX(${n(ax0)}px);opacity:0}
-.m{fill:${c.acc};stroke:${c.accHi};stroke-width:1.1;opacity:0;animation:${CYCLE}s linear 0s infinite}
+.m{fill:${c.acc};stroke:${c.accHi};stroke-width:1.1;animation:${CYCLE}s linear 0s infinite}
 .m circle{stroke:none}
 .m path{fill:none}
 .rail{stroke:${c.faint};stroke-width:1}
-.prog{stroke:${c.acc};stroke-width:1;transform-origin:20px 0;transform:scaleX(0);animation:prog ${CYCLE}s linear ${T0}s infinite}
-.tk{stroke:${c.ink};stroke-width:1.2;opacity:0;transform-box:fill-box;transform-origin:center;animation:${CYCLE}s linear 0s infinite}
+.prog{stroke:${c.acc};stroke-width:1;transform-origin:20px 0;animation:prog ${CYCLE}s linear ${T0}s infinite backwards}
+.tk{stroke:${c.ink};stroke-width:1.2;transform-box:fill-box;transform-origin:center;animation:${CYCLE}s linear 0s infinite}
 .nm{fill:${c.ink}}.ln{fill:${c.muted}}
-@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes draw{from{stroke-dashoffset:1}}
 @keyframes sweep{0%{opacity:1;transform:translateX(${n(ax0)}px)}${pct(SWEEP)}%{opacity:1;transform:translateX(${n(ax1)}px)}${pct(SWEEP + 0.3)}%,100%{opacity:0;transform:translateX(${n(ax1)}px)}}
 @keyframes prog{0%{transform:scaleX(0)}${pct(SWEEP)}%{transform:scaleX(1)}${pct(CYCLE * 0.92)}%{transform:scaleX(1);opacity:1}${pct(CYCLE * 0.97)}%,100%{transform:scaleX(1);opacity:0}}
 ${kf}
-@media (prefers-reduced-motion:reduce){.aoi,.sw,.m,.prog,.tk{animation:none}.aoi{stroke-dashoffset:0}.m,.tk{opacity:1}.prog{transform:none}}
+@media (prefers-reduced-motion:reduce){.aoi,.sw,.m,.prog,.tk{animation:none}}
+.mb{display:none}
+@media (max-width:300px){/*mb*/.dk{display:none}.mb{display:inline}}/*/mb*/
 </style>
 <defs>
 <clipPath id="ci"><path d="M${R} .5H${W - R}a${R - 0.5} ${R - 0.5} 0 0 1 ${R - 0.5} ${R - 0.5}V${IH}H.5V${R}a${R - 0.5} ${R - 0.5} 0 0 1 ${R - 0.5}-${R - 0.5}z"/></clipPath>
+<mask id="veil" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${IH}"><rect width="${W}" height="${IH}" fill="#fff" fill-opacity=".45"/><rect x="${n(ax0)}" y="${n(ay0)}" width="${n(aw)}" height="${n(ah)}" fill="#fff"/></mask>
 <linearGradient id="tr" x1="1" x2="0"><stop offset="0" stop-color="${c.acc}" stop-opacity=".2"/><stop offset="1" stop-color="${c.acc}" stop-opacity="0"/></linearGradient>
 </defs>
 <rect class="frame" x=".5" y=".5" width="${W - 1}" height="${H - 1}" rx="${R}"/>
 <g clip-path="url(#ci)">
-<image href="${img}" width="${W}" height="${IH}" preserveAspectRatio="none" style="image-rendering:pixelated" image-rendering="optimizeSpeed"/>
-<path class="veil" fill-rule="evenodd" d="M0 0H${W}V${IH}H0z M${n(ax0)} ${n(ay0)}V${n(ay1)}H${n(ax1)}V${n(ay0)}z"/>
+<image href="${img}" width="${W}" height="${IH}" preserveAspectRatio="none" style="image-rendering:pixelated" image-rendering="optimizeSpeed" mask="url(#veil)"/>
 <g clip-path="url(#ca)"><g class="sw"><rect x="-34" y="${n(ay0)}" width="34" height="${n(ah)}" fill="url(#tr)"/><path d="M0 ${n(ay0)}V${n(ay1)}" stroke="${c.acc}" stroke-width="1.4"/></g></g>
 ${marks}
 <path class="aoi" pathLength="1" d="M${n(ax0)} ${n(ay0)}H${n(ax1)}V${n(ay1)}H${n(ax0)}Z"/>
 </g>
 <clipPath id="ca"><rect x="${n(ax0)}" y="${n(ay0)}" width="${n(aw)}" height="${n(ah)}"/></clipPath>
-<path class="rail" d="M20 ${RY}H${W - 20}M0 ${IH}.5H${W}"/>
+<path class="rail" d="M0 ${IH}.5H${W}"/>
+<g class="dk"><path class="rail" d="M20 ${RY}H${W - 20}"/>
 <path class="prog" d="M20 ${RY}H${W - 20}"/>
 ${ticks}
 ${name.map((g) => `<path class="nm" d="${g.d}"/>`).join('')}
-<path class="ln" d="${line.d}"/>
+<path class="ln" d="${line.d}"/></g>
+<g class="mb">${nameMob.map((g) => `<path class="nm" d="${g.d}"/>`).join('')}<path class="ln" d="${lineMob.d}"/></g>
 </svg>`;
     writeAsset(`marco-polo-${theme}.svg`, tidy(svg));
   }
