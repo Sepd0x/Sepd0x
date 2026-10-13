@@ -19,8 +19,8 @@
   <br>
   <a href="https://tryhackme.com/p/Sepd">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="assets/thm-dark.svg?v=2">
-      <img src="assets/thm-light.svg?v=2" width="98.5%" alt="TryHackMe profile: level, rooms, streak, badges and rank">
+      <source media="(prefers-color-scheme: dark)" srcset="assets/thm-dark.svg?v=3">
+      <img src="assets/thm-light.svg?v=3" width="98.5%" alt="TryHackMe: skill webs, level, capability score, points, rooms, streak, badges and rank">
     </picture>
   </a>
 </p>
