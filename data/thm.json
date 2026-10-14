@@ -2,13 +2,13 @@
   "username": "Sepd",
   "level": "[0x9]",
   "title": "MAGE",
-  "rank": 143383,
+  "rank": 143449,
   "top_percent": 6,
   "badges": 14,
   "streak": 20,
   "rooms": 70,
   "source": "manual",
-  "as_of": "2026-10-13",
+  "as_of": "2026-10-14",
   "score": 45.6,
   "league": "platinum",
   "best_streak": 20,
@@ -214,9 +214,8 @@
     ]
   ],
   "activity": {
-    "from": "2025-10-08",
+    "from": "2025-10-09",
     "days": [
-      0,
       0,
       0,
       0,
@@ -586,7 +585,8 @@
       29,
       45,
       21,
-      30
+      30,
+      0
     ],
     "totals": {
       "questions": 988,
