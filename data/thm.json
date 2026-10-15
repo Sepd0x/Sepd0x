@@ -2,17 +2,17 @@
   "username": "Sepd",
   "level": "[0x9]",
   "title": "MAGE",
-  "rank": 143449,
-  "top_percent": 6,
-  "badges": 14,
-  "streak": 20,
-  "rooms": 70,
+  "rank": 137088,
+  "top_percent": 5,
+  "badges": 15,
+  "streak": 21,
+  "rooms": 72,
   "source": "manual",
-  "as_of": "2026-10-14",
-  "score": 45.6,
+  "as_of": "2026-10-15",
+  "score": 45.8,
   "league": "platinum",
-  "best_streak": 20,
-  "points": 8396,
+  "best_streak": 21,
+  "points": 8740,
   "next_level": {
     "level": "[0xA]",
     "title": "WIZARD",
@@ -33,11 +33,11 @@
       ],
       [
         "Malware Analysis",
-        22
+        33
       ],
       [
         "Penetration Testing",
-        51
+        54
       ],
       [
         "Exploitation",
@@ -51,7 +51,7 @@
     "analyst": [
       [
         "Security Analysis",
-        81
+        87
       ],
       [
         "Digital Forensics",
@@ -71,13 +71,13 @@
       ],
       [
         "Detection Engineering",
-        84
+        90
       ]
     ],
     "pentester": [
       [
         "Penetration Testing",
-        37
+        39
       ],
       [
         "Red Teaming",
@@ -85,7 +85,7 @@
       ],
       [
         "Exploitation",
-        32
+        34
       ],
       [
         "Enumeration",
@@ -97,17 +97,17 @@
       ],
       [
         "Vulnerability Analysis",
-        92
+        96
       ]
     ],
     "engineer": [
       [
         "Security Architecture",
-        82
+        89
       ],
       [
         "Threat Management",
-        53
+        54
       ],
       [
         "Incident Response",
@@ -193,6 +193,11 @@
       "Blue",
       9.6,
       "2026-10-13"
+    ],
+    [
+      "Session Held",
+      4.7,
+      "2026-10-14"
     ]
   ],
   "tools": [
@@ -214,9 +219,8 @@
     ]
   ],
   "activity": {
-    "from": "2025-10-09",
+    "from": "2025-10-10",
     "days": [
-      0,
       0,
       0,
       0,
@@ -586,12 +590,13 @@
       45,
       21,
       30,
+      62,
       0
     ],
     "totals": {
-      "questions": 988,
-      "rooms": 152,
-      "machines": 103
+      "questions": 1045,
+      "rooms": 156,
+      "machines": 104
     }
   }
 }
