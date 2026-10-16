@@ -2,17 +2,17 @@
   "username": "Sepd",
   "level": "[0x9]",
   "title": "MAGE",
-  "rank": 137088,
+  "rank": 136385,
   "top_percent": 5,
   "badges": 15,
-  "streak": 21,
+  "streak": 22,
   "rooms": 72,
   "source": "manual",
-  "as_of": "2026-10-15",
+  "as_of": "2026-10-16",
   "score": 45.8,
   "league": "platinum",
-  "best_streak": 21,
-  "points": 8740,
+  "best_streak": 22,
+  "points": 8780,
   "next_level": {
     "level": "[0xA]",
     "title": "WIZARD",
@@ -219,9 +219,8 @@
     ]
   ],
   "activity": {
-    "from": "2025-10-10",
+    "from": "2025-10-11",
     "days": [
-      0,
       0,
       0,
       0,
@@ -591,12 +590,13 @@
       21,
       30,
       62,
+      16,
       0
     ],
     "totals": {
-      "questions": 1045,
+      "questions": 1055,
       "rooms": 156,
-      "machines": 104
+      "machines": 110
     }
   }
 }
