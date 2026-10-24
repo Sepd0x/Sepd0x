@@ -1,23 +1,23 @@
 {
   "username": "Sepd",
-  "level": "[0x9]",
-  "title": "MAGE",
-  "rank": 90600,
-  "top_percent": 4,
-  "badges": 19,
-  "streak": 29,
-  "rooms": 94,
+  "level": "[0xA]",
+  "title": "WIZARD",
+  "rank": 79836,
+  "top_percent": 3,
+  "badges": 24,
+  "streak": 30,
+  "rooms": 95,
   "source": "manual",
-  "as_of": "2026-10-22",
-  "score": 48.6,
+  "as_of": "2026-10-24",
+  "score": 48.8,
   "league": "sapphire",
-  "best_streak": 29,
-  "points": 11944,
+  "best_streak": 30,
+  "points": 12975,
   "next_level": {
-    "level": "[0xA]",
-    "title": "WIZARD",
-    "from": 8000,
-    "at": 12000
+    "level": "[0xB]",
+    "title": "MASTER",
+    "from": 12000,
+    "at": 15000
   },
   "since": "2026-03",
   "path_now": "Cyber Security 101",
@@ -25,93 +25,93 @@
     "foundational": [
       [
         "Security Operations",
-        77
+        55
       ],
       [
         "Incident Response",
-        50
+        26
       ],
       [
         "Malware Analysis",
-        33
+        20
       ],
       [
         "Penetration Testing",
-        66
+        54
       ],
       [
         "Exploitation",
-        60
+        38
       ],
       [
         "Red Teaming",
-        61
+        56
       ]
     ],
     "analyst": [
       [
         "Security Analysis",
-        90
+        83
       ],
       [
         "Digital Forensics",
-        73
+        54
       ],
       [
         "Incident Response",
-        43
+        23
       ],
       [
         "Security Operations",
-        69
+        56
       ],
       [
         "Threat Hunting",
-        40
+        19
       ],
       [
         "Detection Engineering",
-        90
+        72
       ]
     ],
     "pentester": [
       [
         "Penetration Testing",
-        59
+        51
       ],
       [
         "Red Teaming",
-        78
+        56
       ],
       [
         "Exploitation",
-        45
+        29
       ],
       [
         "Enumeration",
-        61
+        56
       ],
       [
         "Privilege Escalation",
-        0
+        10
       ],
       [
         "Vulnerability Analysis",
-        96
+        73
       ]
     ],
     "engineer": [
       [
         "Security Architecture",
-        89
+        78
       ],
       [
         "Threat Management",
-        64
+        60
       ],
       [
         "Incident Response",
-        60
+        55
       ],
       [
         "Identity Security",
@@ -119,7 +119,7 @@
       ],
       [
         "Security Automation",
-        100
+        50
       ]
     ]
   },
@@ -218,6 +218,31 @@
       "Mr. Robot",
       2.7,
       "2026-10-21"
+    ],
+    [
+      "First alert closed",
+      6.9,
+      "2026-10-22"
+    ],
+    [
+      "First scenario completed",
+      5.5,
+      "2026-10-22"
+    ],
+    [
+      "100% true positive rate",
+      4.5,
+      "2026-10-22"
+    ],
+    [
+      "Completed a tabletop exercise",
+      0.1,
+      "2026-10-22"
+    ],
+    [
+      "30 Day Streak",
+      9.6,
+      "2026-10-23"
     ]
   ],
   "tools": [
@@ -239,10 +264,8 @@
     ]
   ],
   "activity": {
-    "from": "2025-10-17",
+    "from": "2025-10-19",
     "days": [
-      0,
-      0,
       0,
       0,
       0,
@@ -611,12 +634,14 @@
       76,
       8,
       29,
-      22
+      48,
+      5,
+      0
     ],
     "totals": {
-      "questions": 1332,
-      "rooms": 207,
-      "machines": 147
+      "questions": 1347,
+      "rooms": 213,
+      "machines": 155
     }
   }
 }
