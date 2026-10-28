@@ -13,7 +13,7 @@
   <a href="https://github.com/Sepd0x/marco-polo">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/marco-polo-dark.svg?v=2">
-      <img src="assets/marco-polo-light.svg?v=2" width="49%" alt="marco-polo: draw an area on a satellite map, find every pool">
+      <img src="assets/marco-polo-light.svg?v=2" width="49%" alt="marco-polo: draw an area on a map, it finds and measures the pools in aerial photos">
     </picture>
   </a>
   <br>
