@@ -52,7 +52,7 @@ ${txt(16, 25, 'CS2 IP Changer', 12, T.muted)}${txt(110, 25, '/', 12, T.strong)}$
     const title = kind === 'good' ? 'Protected' : 'Checking the phone’s IP…';
     const sub = kind === 'good' ? 'Servers on your list only see the phone’s IP. If the phone drops, they are blocked.'
       : 'Servers on your list stay blocked until the app confirms the new IP.';
-    return `<g class="${kind === 'good' ? 'hg' : 'hw'}"><rect x="${hx}" y="${hy}" width="30" height="30" fill="${col}" fill-opacity=".12"/>${shield(hx + 15, hy + 9, 7.5, col)}
+    return `<g class="${kind === 'good' ? 'hg' : 'hw'}"><rect x="${hx}" y="${hy}" width="30" height="30" fill="${col}" fill-opacity=".12"/>${shield(hx + 15, hy + 14.5, 7.5, col)}
 ${txt(hx + 42, hy + 13, title, 16, col, { weight: 600 })}${txt(hx + 42, hy + 30, narrow && sub.length > 60 ? sub.slice(0, 57) + '…' : sub, 11.5, T.muted)}</g>`;
   };
   parts.push(hero('good'), hero('warn'));

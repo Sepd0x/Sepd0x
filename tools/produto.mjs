@@ -13,7 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import sharp from 'sharp';
-import { ROOT, ASSETS, CACHE, OFFLINE, isMain, n } from './lib.mjs';
+import { ROOT, ASSETS, CACHE, OFFLINE, isMain, n, profile } from './lib.mjs';
 import { appPanel } from './appui.mjs';
 
 // Source images, kept in the repo (tools/.cache is not committed, so the Action would not find them there).
@@ -76,18 +76,49 @@ const card = (c, x, y, w, h, r = 16) => `<rect x="${x + 0.5}" y="${y + 0.5}" wid
 const lines = (cls, x, y, size, step, arr) => arr.map((l, i) => `<text class="${cls}" x="${x}" y="${n(y + i * step)}" font-size="${size}">${l}</text>`).join('');
 
 // ---------- hero ----------
-function hero(c, a, t, R, mob) {
-  const W = mob ? 600 : 1000, H = mob ? 300 : 200, X = mob ? 32 : 40;
+// The year's contributions per week as one smooth line (Catmull-Rom to Bezier), from the first active week
+// to this one, over a thin axis; the month it starts and "today" under the ends. Drawn in on load; the
+// static picture is the whole line. The Action re-renders daily, so the number follows GitHub's own.
+function signal(c, a, prof, x0, x1, base, hgt, mob) {
+  const cal = prof.contributionsCollection.contributionCalendar;
+  const weeks = cal.weeks.map((w) => ({ at: w.contributionDays[0].date, v: w.contributionDays.reduce((s, d) => s + d.contributionCount, 0) }));
+  const first = Math.max(0, weeks.findIndex((w) => w.v > 0) - 1), ws = weeks.slice(first);
+  const max = Math.max(1, ...ws.map((w) => w.v));
+  const P = ws.map((w, i) => [x0 + ((x1 - x0) * i) / Math.max(1, ws.length - 1), base - hgt * Math.sqrt(w.v / max)]);
+  let d = `M${n(P[0][0])} ${n(P[0][1])}`;
+  for (let i = 0; i < P.length - 1; i++) {
+    const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += `C${n(c1[0])} ${n(Math.min(base, c1[1]))} ${n(c2[0])} ${n(Math.min(base, c2[1]))} ${n(p2[0])} ${n(p2[1])}`;
+  }
+  const end = P[P.length - 1], fs = mob ? 19 : 14.5;
+  const month = MONTHS[new Date(ws[0].at).getUTCMonth()];
+  return `<defs><linearGradient id="fd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}" stop-opacity=".14"/><stop offset="1" stop-color="${a}" stop-opacity="0"/></linearGradient></defs>
+<text x="${x0}" y="${n(base - hgt - (mob ? 22 : 18))}" font-size="${mob ? 21 : 15.5}"><tspan class="m ink" font-weight="600">${cal.totalContributions}</tspan><tspan dx="0.3em" class="s mu">contributions in the last year</tspan></text>
+<path d="M${x0} ${base}H${x1}" stroke="${c.rule}"/>
+<path class="ar" d="${d}L${n(x1)} ${base}L${n(x0)} ${base}Z" fill="url(#fd)"/>
+<path class="ln" pathLength="1" d="${d}" fill="none" stroke="${a}" stroke-width="${mob ? 2.2 : 1.7}" stroke-linejoin="round"/>
+<circle class="now" cx="${n(end[0])}" cy="${n(end[1])}" r="${mob ? 5 : 4}" fill="${a}"/>
+<text class="s fa" x="${x0}" y="${base + (mob ? 30 : 24)}" font-size="${fs}">${month}</text><text class="s fa" x="${x1}" y="${base + (mob ? 30 : 24)}" font-size="${fs}" text-anchor="end">today</text>`;
+}
+const SIGNAL_CSS = `.ln{stroke-dasharray:1;animation:draw 2.4s cubic-bezier(.45,0,.2,1) .3s backwards}@keyframes draw{from{stroke-dashoffset:1}}
+.ar{animation:fade 1s ease-out 1.8s backwards}@keyframes fade{from{opacity:0}}
+.now{animation:pulse 2.6s ease-in-out 2.7s infinite}@keyframes pulse{50%{opacity:.3}}`;
+
+function hero(c, a, t, R, mob, prof) {
+  const W = mob ? 600 : 1000, H = mob ? 500 : 350, X = mob ? 32 : 40;
   const L = logo();
   const rx = mob ? X : W - X - 318, ry = mob ? 238 : 92, iz = mob ? 44 : 40;
   const rel = R ? `${L ? `<image href="${L}" x="${rx}" y="${ry - iz / 2 - 4}" width="${iz}" height="${iz}"/>` : ''}
 <text x="${rx + iz + 12}" y="${ry - 2}" font-size="${mob ? 21 : 16}"><tspan class="s ink" font-weight="600">CS2 IP Changer</tspan><tspan dx="0.3em" class="m mu">${esc(R.tag)}</tspan></text>
 <text class="s fa" x="${rx + iz + 12}" y="${ry + (mob ? 24 : 19)}" font-size="${mob ? 19 : 15}">${R.pre ? 'pre-release' : 'release'} · ${day(R.at)}</text>` : '';
-  return tidy(`${head(W, H, 'Sepd0x, maker of CS2 IP Changer', '', c)}
+  const sg = prof ? signal(c, a, prof, X, W - X, mob ? 430 : 296, mob ? 74 : 62, mob) : '';
+  return tidy(`${head(W, H, 'Sepd0x, maker of CS2 IP Changer; contributions in the last year', SIGNAL_CSS, c)}
 ${card(c, 0, 0, W, H)}
 <text class="s ink" x="${X - 5}" y="${mob ? 124 : 116}" font-size="${mob ? 100 : 84}" font-weight="600" letter-spacing="${mob ? -4 : -3.2}">Sepd0x</text>
 <text class="s mu" x="${X}" y="${mob ? 172 : 156}" font-size="${mob ? 28 : 21}">Maker of CS2 IP Changer.</text>
 ${rel}
+${sg}
 </svg>`);
 }
 
@@ -261,6 +292,7 @@ ${web}
 export async function render({ paleta = process.env.PALETA || 'mono', out = process.env.OUT || ASSETS } = {}) {
   const pal = PALETAS[paleta];
   const R = await release(), d = readThm();
+  let prof = null; try { prof = await profile(); } catch (e) { console.log(`hero: no contributions (${e.message})`); }
   const AD = await aerial(298 / 470), AM = await aerial(300 / 598);
   fs.mkdirSync(out, { recursive: true });
   const put = (name, svg) => { if (!svg) return; fs.writeFileSync(path.join(out, name), svg); console.log(`wrote  ${name}  ${(Buffer.byteLength(svg) / 1024).toFixed(1)} KB`); };
@@ -268,7 +300,7 @@ export async function render({ paleta = process.env.PALETA || 'mono', out = proc
     const c = BASE[t], a = pal[t];
     for (const mob of [false, true]) {
       const sfx = `${mob ? '-m' : ''}-${t}.svg`;
-      put(`hero${sfx}`, hero(c, a, t, R, mob));
+      put(`hero${sfx}`, hero(c, a, t, R, mob, prof));
       put(`cs2${sfx}`, cs2(c, a, R, null, mob));
       put(`marco-polo${sfx}`, marco(c, a, mob ? AM : AD, mob).svg);
       put(`thm${sfx}`, thm(c, a, d, mob));
