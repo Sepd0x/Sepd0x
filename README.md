@@ -1,9 +1,9 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/hero-m-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/hero-m-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg">
-    <img src="assets/hero-light.svg" width="100%" alt="Sepd0x, maker of CS2 IP Changer">
+    <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/hero-m-dark.svg?v=2">
+    <source media="(max-width: 600px)" srcset="assets/hero-m-light.svg?v=2">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg?v=2">
+    <img src="assets/hero-light.svg?v=2" width="100%" alt="Sepd0x, maker of CS2 IP Changer">
   </picture>
 </p>
 
@@ -14,10 +14,10 @@
 <p align="center">
   <a href="https://github.com/Sepd0x/cs2-ip-changer">
     <picture>
-      <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/cs2-m-dark.svg">
-      <source media="(max-width: 600px)" srcset="assets/cs2-m-light.svg">
-      <source media="(prefers-color-scheme: dark)" srcset="assets/cs2-dark.svg">
-      <img src="assets/cs2-light.svg" width="100%" alt="CS2 IP Changer: sends CS2 and Steam through your Android phone's mobile data, so community servers see your carrier's IP and not your home IP. Never touches the game process or its files.">
+      <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/cs2-m-dark.svg?v=2">
+      <source media="(max-width: 600px)" srcset="assets/cs2-m-light.svg?v=2">
+      <source media="(prefers-color-scheme: dark)" srcset="assets/cs2-dark.svg?v=2">
+      <img src="assets/cs2-light.svg?v=2" width="100%" alt="CS2 IP Changer: sends CS2 and Steam through your Android phone's mobile data, so community servers see your carrier's IP and not your home IP. Never touches the game process or its files.">
     </picture>
   </a>
 </p>
