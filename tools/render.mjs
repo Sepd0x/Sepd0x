@@ -1,14 +1,8 @@
-// Renders every asset. The terrain is redrawn on every run (the calendar moves daily); the portrait
-// and the marco-polo card only when their source image changed (hashes kept in assets/.state.json);
-// the TryHackMe strip from data/thm.json, refreshed first when running in the Action (THM_LIVE=1).
-// usage: node render.mjs [--force] [--offline]
-import { render as terrain } from './terrain.mjs';
-import { render as portrait } from './portrait.mjs';
-import { render as card } from './card.mjs';
-import { render as thm } from './thm.mjs';
+// Renders every asset of the profile (the "produto" page, 28 Oct 2026): the hero (contributions and the
+// latest cs2-ip-changer release change daily), the buttons, the cs2 card and the marco-polo + TryHackMe
+// row, from tools/.cache, the GitHub API and data/thm.json. The pieces of the earlier page (terrain,
+// portrait, the old cards and THM panel) keep their generators but are no longer drawn.
+// usage: node render.mjs [--offline]
+import { render } from './produto.mjs';
 
-const force = process.argv.includes('--force');
-await terrain();
-await portrait({ force });
-await card({ force });
-await thm();
+await render();
