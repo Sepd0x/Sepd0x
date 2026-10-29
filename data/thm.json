@@ -2,16 +2,16 @@
   "username": "Sepd",
   "level": "[0xA]",
   "title": "WIZARD",
-  "rank": 73749,
+  "rank": 73799,
   "top_percent": 3,
   "badges": 24,
-  "streak": 34,
+  "streak": 35,
   "rooms": 99,
   "source": "manual",
-  "as_of": "2026-10-28",
+  "as_of": "2026-10-29",
   "score": 47.8,
   "league": "sapphire",
-  "best_streak": 34,
+  "best_streak": 35,
   "points": 13651,
   "next_level": {
     "level": "[0xB]",
@@ -264,9 +264,8 @@
     ]
   ],
   "activity": {
-    "from": "2025-10-23",
+    "from": "2025-10-24",
     "days": [
-      0,
       0,
       0,
       0,
@@ -636,12 +635,13 @@
       1,
       2,
       41,
+      6,
       0
     ],
     "totals": {
-      "questions": 1397,
-      "rooms": 219,
-      "machines": 159
+      "questions": 1401,
+      "rooms": 220,
+      "machines": 160
     }
   }
 }
