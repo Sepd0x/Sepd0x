@@ -190,8 +190,8 @@ function cs2(c, a, R, S, mob) {
   }).join('');
   const yR = yF + ((mob ? POINTS.length : 2) - 1) * fstep + (mob ? 64 : 52);
   const trust = R ? (mob
-    ? `<text class="s fa" x="${X}" y="${yR}" font-size="19">Never touches the game or its files.</text><text x="${X}" y="${yR + 30}" font-size="19"><tspan class="s fa">No telemetry&#160;·</tspan><tspan dx="0.3em" class="m fa">${esc(R.tag)}</tspan><tspan class="s fa" dx="0.3em">·&#160;Windows</tspan></text>`
-    : `<text x="${X}" y="${yR}" font-size="15.5"><tspan class="s fa">Never touches the game process or its files · no telemetry&#160;·</tspan><tspan dx="0.3em" class="m fa">${esc(R.tag)}</tspan><tspan class="s fa" dx="0.3em">·&#160;Windows 10/11</tspan></text>`) : '';
+    ? `<text class="s fa" x="${X}" y="${yR}" font-size="19">Never touches the game or its files.</text><text x="${X}" y="${yR + 30}" font-size="19"><tspan class="s fa">Anonymous stats, no IP&#160;·</tspan><tspan dx="0.3em" class="m fa">${esc(R.tag)}</tspan><tspan class="s fa" dx="0.3em">·&#160;Windows</tspan></text>`
+    : `<text x="${X}" y="${yR}" font-size="15.5"><tspan class="s fa">Never touches the game process or its files · anonymous stats, no IP&#160;·</tspan><tspan dx="0.3em" class="m fa">${esc(R.tag)}</tspan><tspan class="s fa" dx="0.3em">·&#160;Windows 10/11</tspan></text>`) : '';
   const H = Math.round(yR + (mob ? 30 : 0) + (mob ? 44 : 40));
   return tidy(`${head(W, H, 'CS2 IP Changer: sends CS2 and Steam through your Android phone\'s mobile data, so community servers see your carrier\'s IP and not your home IP.', A.css, c)}
 ${card(c, 0, 0, W, H)}
