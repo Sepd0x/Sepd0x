@@ -2,16 +2,16 @@
   "username": "Sepd",
   "level": "[0xA]",
   "title": "WIZARD",
-  "rank": 73585,
+  "rank": 73680,
   "top_percent": 3,
   "badges": 25,
-  "streak": 36,
+  "streak": 37,
   "rooms": 100,
   "source": "manual",
-  "as_of": "2026-11-01",
+  "as_of": "2026-11-02",
   "score": 47.8,
   "league": "sapphire",
-  "best_streak": 36,
+  "best_streak": 37,
   "points": 13699,
   "next_level": {
     "level": "[0xB]",
@@ -20,7 +20,6 @@
     "at": 15000
   },
   "since": "2026-03",
-  "path_now": "Cyber Security 101",
   "skills": {
     "foundational": [
       [
@@ -269,9 +268,8 @@
     ]
   ],
   "activity": {
-    "from": "2025-10-27",
+    "from": "2025-10-28",
     "days": [
-      0,
       0,
       0,
       0,
@@ -641,11 +639,12 @@
       0,
       15,
       0,
+      8,
       0
     ],
     "totals": {
-      "questions": 1413,
-      "rooms": 222,
+      "questions": 1418,
+      "rooms": 225,
       "machines": 160
     }
   }
