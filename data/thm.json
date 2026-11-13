@@ -2,13 +2,13 @@
   "username": "Sepd",
   "level": "[0xA]",
   "title": "WIZARD",
-  "rank": 74209,
+  "rank": 74316,
   "top_percent": 3,
   "badges": 25,
   "streak": 40,
   "rooms": 101,
   "source": "manual",
-  "as_of": "2026-11-11",
+  "as_of": "2026-11-13",
   "score": 35,
   "league": "sapphire",
   "best_streak": 40,
@@ -24,11 +24,11 @@
     "foundational": [
       [
         "Security Operations",
-        56
+        51
       ],
       [
         "Incident Response",
-        30
+        28
       ],
       [
         "Malware Analysis",
@@ -58,11 +58,11 @@
       ],
       [
         "Incident Response",
-        28
+        24
       ],
       [
         "Security Operations",
-        58
+        52
       ],
       [
         "Threat Hunting",
@@ -106,11 +106,11 @@
       ],
       [
         "Threat Management",
-        61
+        59
       ],
       [
         "Incident Response",
-        59
+        54
       ],
       [
         "Identity Security",
@@ -268,10 +268,8 @@
     ]
   ],
   "activity": {
-    "from": "2025-11-06",
+    "from": "2025-11-08",
     "days": [
-      0,
-      0,
       0,
       0,
       0,
@@ -639,6 +637,8 @@
       2,
       0,
       2,
+      0,
+      0,
       0,
       0
     ],
