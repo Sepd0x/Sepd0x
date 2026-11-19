@@ -1,8 +1,8 @@
-// Renders every asset of the profile (the "produto" page, 28 Oct 2026): the hero (contributions and the
-// latest cs2-ip-changer release change daily), the buttons, the cs2 card and the marco-polo + TryHackMe
-// row, from tools/.cache, the GitHub API and data/thm.json. The pieces of the earlier page (terrain,
-// portrait, the old cards and THM panel) keep their generators but are no longer drawn.
+// Renders every asset of the profile page (the "vitrine", 19 Nov 2026): the hero and the cs2 card read the
+// latest cs2-ip-changer release, its downloads, releases, stars and VirusTotal result from GitHub; the
+// TryHackMe card reads data/thm.json. The earlier pages' generators (produto, terrain, portrait, cards) stay
+// in tools/ but are no longer drawn.
 // usage: node render.mjs [--offline]
-import { render } from './produto.mjs';
+import { render } from './vitrine.mjs';
 
 await render();
