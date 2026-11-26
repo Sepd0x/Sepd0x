@@ -129,18 +129,18 @@ function regionList(x, y, w, fs, step) {
 function hero(R, icon, mob) {
   const W = mob ? 600 : 1000, H = mob ? 330 : 236, X = mob ? 40 : 56;
   const cw = mob ? 520 : 380, ch = mob ? 76 : 66, cx = mob ? X : W - X - cw, cy = mob ? 214 : 60, ic = mob ? 48 : 42;
-  return tidy(`${head(W, H, 'Sepd0x, maker of CS2 IP Changer and marco-polo')}${panel(W, H)}
+  return tidy(`${head(W, H, 'Sepd0x, maker of Pickroute (formerly CS2 IP Changer) and marco-polo')}${panel(W, H)}
 ${T(X - 6, mob ? 132 : 136, 104, C.ink, 'Sepd0x', { w: 650, ls: -4 })}
-${T(X, mob ? 180 : 186, mob ? 25 : 22, C.mu, 'I make CS2 IP Changer and marco-polo.')}
+${T(X, mob ? 180 : 186, mob ? 25 : 22, C.mu, 'I make Pickroute and marco-polo.')}
 <rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="${ch / 2}" fill="${C.panel2}"/>
 <image href="${icon}" x="${cx + (ch - ic) / 2 + 2}" y="${cy + (ch - ic) / 2}" width="${ic}" height="${ic}"/>
-<text x="${cx + ch + 8}" y="${cy + (mob ? 34 : 30)}" font-size="${mob ? 20 : 16.5}"><tspan class="s" fill="${C.ink}" font-weight="600">CS2 IP Changer</tspan><tspan class="m" fill="${C.ink}" dx="0.4em">${esc(R.tag)}</tspan></text>
+<text x="${cx + ch + 8}" y="${cy + (mob ? 34 : 30)}" font-size="${mob ? 20 : 16.5}"><tspan class="s" fill="${C.ink}" font-weight="600">Pickroute</tspan><tspan class="m" fill="${C.ink}" dx="0.4em">${esc(R.tag)}</tspan></text>
 <text class="s" x="${cx + ch + 8}" y="${cy + (mob ? 60 : 52)}" font-size="${mob ? 18 : 14.5}" fill="${C.mu}">latest release · ${day(R.at)}</text></svg>`);
 }
 
 function cs2(R, icon, shot, mob) {
   const W = mob ? 600 : 1000, X = mob ? 40 : 56;
-  const label = 'CS2 IP Changer: a CS2 server picker for the 30 matchmaking regions, and CS2 over your phone’s mobile data so community servers only see your carrier’s IP. Never touches the game.';
+  const label = 'Pickroute (formerly CS2 IP Changer): a CS2 server picker for the 30 matchmaking regions, and CS2 over your phone’s mobile data so community servers only see your carrier’s IP. Never touches the game.';
   const S = stats(R);
   if (mob) {
     const pk = [PICK[0], ...wrap(PICK[1], 40)], ph = [PHONE[0], ...wrap(PHONE[1], 40)];
@@ -148,7 +148,7 @@ function cs2(R, icon, shot, mob) {
     const l1 = S.slice(0, 3), l2 = S.slice(3);
     return tidy(`${head(W, H, label)}${panel(W, H)}
 <image href="${icon}" x="${X}" y="44" width="72" height="72"/>
-${T(X - 2, 176, 50, C.ink, 'CS2 IP Changer', { w: 650, ls: -1.4 })}
+${T(X - 2, 176, 50, C.ink, 'Pickroute', { w: 650, ls: -1.4 })}${T(X + 238, 176, 18, C.mu, 'formerly CS2 IP Changer')}
 <text x="${X}" y="220" font-size="20">${l1.map(([v, k], i) => (i ? dot : '') + fact(v, k, !i)).join('')}</text>
 <text x="${X}" y="250" font-size="20">${l2.map(([v, k]) => fact(v, k, true) + dot).join('')}<tspan class="s" fill="${C.mu}" dx="0.45em">Windows 10/11</tspan></text>
 ${T(X, y1, 21, C.ink, pk[0], { w: 600 })}${lines(X, y1 + 30, 20, 30, C.mu, pk.slice(1))}
@@ -162,7 +162,7 @@ ${lines(X, H - 84, 18, 27, C.mu, [`${R.tag} · ${day(R.at)}`, 'Never touches the
   const pk = wrap(PICK[1], 100), ph = wrap(PHONE[1], 100);
   return tidy(`${head(W, H, label)}${panel(W, H)}
 <image href="${icon}" x="${X}" y="52" width="64" height="64"/>
-${T(X + 84, 96, 46, C.ink, 'CS2 IP Changer', { w: 650, ls: -1.4 })}
+${T(X + 84, 96, 46, C.ink, 'Pickroute', { w: 650, ls: -1.4 })}${T(X + 84 + 214, 96, 17, C.mu, 'formerly CS2 IP Changer')}
 <text x="${X + 86}" y="128" font-size="16.5">${S.map(([v, k2], i) => (i ? dot : '') + fact(v, k2, !i)).join('')}</text>
 ${para(X, 196, 17.5, 27, [PICK[0], ...pk])}
 ${para(X, 196 + 27 * pk.length + 22, 17.5, 27, [PHONE[0], ...ph])}
@@ -229,7 +229,7 @@ export async function render({ out = process.env.OUT || ASSETS } = {}) {
     'marco-polo.svg': marco(A, false), 'marco-polo-m.svg': marco(A, true),
   };
   if (D) { files['thm.svg'] = thm(D, false); files['thm-m.svg'] = thm(D, true); }
-  const BTNS = [['download', 'Download CS2 IP Changer'], ['site', 'Website'], ['marco', 'marco-polo'], ['thm', 'TryHackMe']];
+  const BTNS = [['download', 'Download Pickroute'], ['site', 'Website'], ['marco', 'marco-polo'], ['thm', 'TryHackMe']];
   for (const theme of ['dark', 'light']) BTNS.forEach(([id, text], i) => {
     files[`btn-${id}-${theme}.svg`] = pill(text, theme, { primary: i === 0 });
     if (i) files[`btn-${id}-m-${theme}.svg`] = pill(text, theme, { mob: true });
