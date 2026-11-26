@@ -131,7 +131,7 @@ function hero(R, icon, mob) {
   const cw = mob ? 520 : 380, ch = mob ? 76 : 66, cx = mob ? X : W - X - cw, cy = mob ? 214 : 60, ic = mob ? 48 : 42;
   return tidy(`${head(W, H, 'Sepd0x, maker of Pickroute (formerly CS2 IP Changer) and marco-polo')}${panel(W, H)}
 ${T(X - 6, mob ? 132 : 136, 104, C.ink, 'Sepd0x', { w: 650, ls: -4 })}
-${T(X, mob ? 180 : 186, mob ? 25 : 22, C.mu, 'I make Pickroute and marco-polo.')}
+${T(X, mob ? 180 : 186, mob ? 25 : 22, C.mu, 'Pickroute · marco-polo · TryHackMe')}
 <rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="${ch / 2}" fill="${C.panel2}"/>
 <image href="${icon}" x="${cx + (ch - ic) / 2 + 2}" y="${cy + (ch - ic) / 2}" width="${ic}" height="${ic}"/>
 <text x="${cx + ch + 8}" y="${cy + (mob ? 34 : 30)}" font-size="${mob ? 20 : 16.5}"><tspan class="s" fill="${C.ink}" font-weight="600">Pickroute</tspan><tspan class="m" fill="${C.ink}" dx="0.4em">${esc(R.tag)}</tspan></text>
