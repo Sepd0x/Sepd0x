@@ -1,6 +1,6 @@
 // PRODUTO: the profile as a product page (28 Oct 2026). Quiet cards on the page colour (translucent
 // fill and edge, so they sit on every GitHub theme), large normal type, mono only for digits, one accent
-// taken from the cs2-ip-changer app. One SVG per link, each full width, each with a narrow phone version:
+// taken from the Pickroute app. One SVG per link, each full width, each with a narrow phone version:
 //   hero       the handle, one line, the app icon and its newest release (read from GitHub on render)
 //   btn-download  the only button: straight to the newest release
 //   cs2        the app, large: what it does, four things a CS2 player recognises, the real Connection tab
@@ -52,7 +52,7 @@ async function api(p) {
 async function release() {
   const file = path.join(CACHE, 'release.json');
   if (OFFLINE && fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, 'utf8'));
-  const r = (await api('repos/Sepd0x/cs2-ip-changer/releases?per_page=1'))[0];
+  const r = (await api('repos/Sepd0x/pickroute/releases?per_page=1'))[0];
   const d = r ? { tag: r.tag_name, at: r.published_at, pre: r.prerelease } : null;
   fs.mkdirSync(CACHE, { recursive: true });
   fs.writeFileSync(file, JSON.stringify(d));

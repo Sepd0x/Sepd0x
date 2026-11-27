@@ -55,14 +55,14 @@ async function api(p) {
 async function cs2Data() {
   const file = path.join(CACHE, 'vitrine.json');
   if (OFFLINE && fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, 'utf8'));
-  const repo = await api('repos/Sepd0x/cs2-ip-changer');
+  const repo = await api('repos/Sepd0x/pickroute');
   const rels = [];
-  for (let p = 1; p < 10; p++) { const page = await api(`repos/Sepd0x/cs2-ip-changer/releases?per_page=100&page=${p}`); rels.push(...page); if (page.length < 100) break; }
+  for (let p = 1; p < 10; p++) { const page = await api(`repos/Sepd0x/pickroute/releases?per_page=100&page=${p}`); rels.push(...page); if (page.length < 100) break; }
   const pub = rels.filter((r) => !r.draft);
-  const latest = await api('repos/Sepd0x/cs2-ip-changer/releases/latest');
+  const latest = await api('repos/Sepd0x/pickroute/releases/latest');
   // The VirusTotal result of the latest release, from the file the app's site and README are built from.
   let vt = null;
-  try { const f = await api('repos/Sepd0x/cs2-ip-changer/contents/site/release.json'); const j = JSON.parse(Buffer.from(f.content, 'base64').toString('utf8')); if (j.tag === latest.tag_name && j.virustotal) vt = `${j.virustotal.flagged}/${j.virustotal.engines}`; } catch {}
+  try { const f = await api('repos/Sepd0x/pickroute/contents/site/release.json'); const j = JSON.parse(Buffer.from(f.content, 'base64').toString('utf8')); if (j.tag === latest.tag_name && j.virustotal) vt = `${j.virustotal.flagged}/${j.virustotal.engines}`; } catch {}
   const d = {
     stars: repo.stargazers_count,
     releases: pub.length,
