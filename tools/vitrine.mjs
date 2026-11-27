@@ -148,7 +148,7 @@ function cs2(R, icon, shot, mob) {
     const l1 = S.slice(0, 3), l2 = S.slice(3);
     return tidy(`${head(W, H, label)}${panel(W, H)}
 <image href="${icon}" x="${X}" y="44" width="72" height="72"/>
-${T(X - 2, 176, 50, C.ink, 'Pickroute', { w: 650, ls: -1.4 })}${T(X + 238, 176, 18, C.mu, 'formerly CS2 IP Changer')}
+${T(X - 2, 176, 50, C.ink, 'Pickroute', { w: 650, ls: -1.4 })}
 <text x="${X}" y="220" font-size="20">${l1.map(([v, k], i) => (i ? dot : '') + fact(v, k, !i)).join('')}</text>
 <text x="${X}" y="250" font-size="20">${l2.map(([v, k]) => fact(v, k, true) + dot).join('')}<tspan class="s" fill="${C.mu}" dx="0.45em">Windows 10/11</tspan></text>
 ${T(X, y1, 21, C.ink, pk[0], { w: 600 })}${lines(X, y1 + 30, 20, 30, C.mu, pk.slice(1))}
@@ -162,7 +162,7 @@ ${lines(X, H - 84, 18, 27, C.mu, [`${R.tag} · ${day(R.at)}`, 'Never touches the
   const pk = wrap(PICK[1], 100), ph = wrap(PHONE[1], 100);
   return tidy(`${head(W, H, label)}${panel(W, H)}
 <image href="${icon}" x="${X}" y="52" width="64" height="64"/>
-${T(X + 84, 96, 46, C.ink, 'Pickroute', { w: 650, ls: -1.4 })}${T(X + 84 + 214, 96, 17, C.mu, 'formerly CS2 IP Changer')}
+${T(X + 84, 96, 46, C.ink, 'Pickroute', { w: 650, ls: -1.4 })}
 <text x="${X + 86}" y="128" font-size="16.5">${S.map(([v, k2], i) => (i ? dot : '') + fact(v, k2, !i)).join('')}</text>
 ${para(X, 196, 17.5, 27, [PICK[0], ...pk])}
 ${para(X, 196 + 27 * pk.length + 22, 17.5, 27, [PHONE[0], ...ph])}
